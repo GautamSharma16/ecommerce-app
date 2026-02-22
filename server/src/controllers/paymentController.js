@@ -1,6 +1,7 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import Order from '../models/Order.js';
+import Cart from '../models/Cart.js';
 
 function getRazorpay() {
   const keyId = process.env.RAZORPAY_KEY_ID;
@@ -35,6 +36,7 @@ export const createRazorpayOrder = async (req, res) => {
       keyId: process.env.RAZORPAY_KEY_ID,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -69,8 +71,36 @@ export const verifyRazorpayPayment = async (req, res) => {
       'paymentResult.status': 'captured',
     });
 
+    await Cart.findOneAndUpdate({ user: order.user }, { items: [] });
+
     res.json({ success: true, message: 'Payment verified.' });
   } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const refundRazorpayPayment = async (req, res) => {
+  try {
+    const razorpay = getRazorpay();
+    if (!razorpay) return res.status(503).json({ message: 'Payment is not configured.' });
+
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found.' });
+    if (order.paymentResult?.status === 'refunded') return res.status(400).json({ message: 'Order already refunded.' });
+    if (!order.isPaid || !order.paymentResult?.id) return res.status(400).json({ message: 'Order is not paid via Razorpay.' });
+
+    const refund = await razorpay.payments.refund(order.paymentResult.id, {
+      amount: Math.round(order.totalPrice * 100),
+      speed: 'normal'
+    });
+
+    order.paymentResult.status = 'refunded';
+    await order.save();
+
+    res.json({ success: true, refund });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

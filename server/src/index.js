@@ -4,6 +4,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import helmet from 'helmet';
+import morgan from 'morgan';
 import mongoSanitize from 'express-mongo-sanitize';
 import connectDB from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -16,12 +17,15 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
 
 connectDB();
 
 const app = express();
 
 app.use(helmet());
+app.use(morgan('dev'));
 app.use(mongoSanitize());
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
 
@@ -38,6 +42,8 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/coupons', couponRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

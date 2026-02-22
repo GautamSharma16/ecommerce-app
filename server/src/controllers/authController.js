@@ -29,6 +29,7 @@ export const register = async (req, res) => {
       token,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -50,6 +51,7 @@ export const login = async (req, res) => {
       token,
     });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

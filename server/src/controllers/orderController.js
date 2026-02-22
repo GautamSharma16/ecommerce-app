@@ -45,9 +45,10 @@ export const createOrder = async (req, res) => {
     for (const item of orderItems) {
       await Product.findByIdAndUpdate(item.product, { $inc: { stock: -item.qty } });
     }
-    await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
+    // Cart clearing moved to payment verification
     res.status(201).json(order);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -57,6 +58,7 @@ export const getMyOrders = async (req, res) => {
     const orders = await Order.find({ user: req.user._id }).sort('-createdAt');
     res.json(orders);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -69,6 +71,7 @@ export const getOrderById = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized.' });
     res.json(order);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

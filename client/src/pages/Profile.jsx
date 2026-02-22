@@ -24,26 +24,31 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16">
-      <h1 className="font-display text-2xl font-bold mb-2">Profile</h1>
-      <p className="text-stone-600 mb-8">Update your display name and view your account details.</p>
-      <form onSubmit={handleSubmit} className="card p-6 space-y-4 mb-8">
+    <div className="max-w-lg mx-auto px-4 sm:px-6 py-14">
+      <h1 className="page-heading">Profile</h1>
+      <p className="page-subheading mt-2 mb-10">Update your display name and view account details.</p>
+
+      <form onSubmit={handleSubmit} className="section-card space-y-5 mb-8">
         <div>
-          <label className="block text-sm font-medium text-stone-600 mb-1">Name</label>
+          <label className="block text-sm font-medium text-zinc-700 mb-2">Name</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input" required />
         </div>
         <div>
-          <label className="block text-sm font-medium text-stone-600 mb-1">Email</label>
-          <input type="email" value={user?.email || ''} className="input bg-stone-50" readOnly disabled />
+          <label className="block text-sm font-medium text-zinc-700 mb-2">Email</label>
+          <input type="email" value={user?.email || ''} className="input bg-zinc-50 cursor-not-allowed" readOnly disabled />
         </div>
-        <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Saving…' : 'Save'}
+        <button type="submit" className="btn-primary w-full py-3.5" disabled={loading}>
+          {loading ? 'Saving…' : 'Save changes'}
         </button>
       </form>
-      <div className="card p-6">
-        <h2 className="font-semibold mb-2">Quick links</h2>
-        <p className="text-stone-600 text-sm mb-4">Manage your orders and activity.</p>
-        <Link to="/orders" className="text-brand-600 font-medium hover:underline">View my orders →</Link>
+
+      <div className="section-card">
+        <h2 className="font-display font-bold text-zinc-900 mb-2">Quick links</h2>
+        <p className="text-zinc-500 text-sm mb-4">Manage your orders and activity.</p>
+        <Link to="/orders" className="inline-flex items-center gap-2 font-semibold text-zinc-900 hover:underline">
+          View my orders
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </Link>
       </div>
     </div>
   );

@@ -10,10 +10,13 @@ import {
   adminGetUsers,
   adminUpdateUser,
   adminGetStats,
+  adminGetReviews,
+  adminDeleteReview,
 } from '../controllers/adminController.js';
 import { protect } from '../middleware/auth.js';
 import { admin } from '../middleware/admin.js';
 import { getProductById } from '../controllers/productController.js';
+import { refundRazorpayPayment } from '../controllers/paymentController.js';
 
 const router = express.Router();
 router.use(protect, admin);
@@ -33,8 +36,12 @@ router.delete('/products/:id', adminDeleteProduct);
 
 router.get('/orders', adminGetOrders);
 router.put('/orders/:id', adminUpdateOrderStatus);
+router.post('/orders/:id/refund', refundRazorpayPayment);
 
 router.get('/users', adminGetUsers);
 router.put('/users/:id', adminUpdateUser);
+
+router.get('/reviews', adminGetReviews);
+router.delete('/reviews/:productId/:reviewId', adminDeleteReview);
 
 export default router;

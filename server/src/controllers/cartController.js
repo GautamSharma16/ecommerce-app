@@ -12,6 +12,7 @@ export const fetchCart = async (req, res) => {
     const cart = await getCart(req.user._id);
     res.json(cart);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -47,6 +48,7 @@ export const addToCart = async (req, res) => {
     const updated = await getCart(req.user._id);
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -66,6 +68,7 @@ export const updateCartItem = async (req, res) => {
     const updated = await getCart(req.user._id);
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -79,6 +82,7 @@ export const removeFromCart = async (req, res) => {
     const updated = await getCart(req.user._id);
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -89,6 +93,7 @@ export const clearCart = async (req, res) => {
     const cart = await getCart(req.user._id);
     res.json(cart);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

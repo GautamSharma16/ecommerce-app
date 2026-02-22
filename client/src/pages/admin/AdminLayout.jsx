@@ -18,6 +18,15 @@ export default function AdminLayout() {
           <NavLink to="/admin/users" className="block px-4 py-2 rounded-lg hover:bg-stone-800" style={({ isActive }) => (isActive ? { backgroundColor: 'rgb(30 41 59)' } : {})}>
             Users
           </NavLink>
+          <NavLink to="/admin/categories" className="block px-4 py-2 rounded-lg hover:bg-stone-800" style={({ isActive }) => (isActive ? { backgroundColor: 'rgb(30 41 59)' } : {})}>
+            Categories
+          </NavLink>
+          <NavLink to="/admin/coupons" className="block px-4 py-2 rounded-lg hover:bg-stone-800" style={({ isActive }) => (isActive ? { backgroundColor: 'rgb(30 41 59)' } : {})}>
+            Coupons
+          </NavLink>
+          <NavLink to="/admin/reviews" className="block px-4 py-2 rounded-lg hover:bg-stone-800" style={({ isActive }) => (isActive ? { backgroundColor: 'rgb(30 41 59)' } : {})}>
+            Reviews
+          </NavLink>
         </nav>
         <Link to="/" className="block mt-8 text-sm text-stone-400 hover:text-white">← Back to store</Link>
       </aside>

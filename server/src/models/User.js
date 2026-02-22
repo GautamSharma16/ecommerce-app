@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
       country: String,
     },
     phone: { type: String, default: '' },
+    isBlocked: { type: Boolean, default: false },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },

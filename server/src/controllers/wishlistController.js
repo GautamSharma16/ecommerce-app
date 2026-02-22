@@ -11,6 +11,7 @@ export const fetchWishlist = async (req, res) => {
     const wishlist = await getWishlist(req.user._id);
     res.json(wishlist);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -27,6 +28,7 @@ export const addToWishlist = async (req, res) => {
     const updated = await getWishlist(req.user._id);
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -40,6 +42,7 @@ export const removeFromWishlist = async (req, res) => {
     const updated = await getWishlist(req.user._id);
     res.json(updated);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

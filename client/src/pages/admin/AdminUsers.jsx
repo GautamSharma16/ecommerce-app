@@ -9,13 +9,7 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    api.get(`/admin/users?page=${page}&limit=10`)
-      .then(({ data }) => {
-        setUsers(data.users);
-        setTotalPages(data.totalPages);
-      })
-      .finally(() => setLoading(false));
+    fetchUsers();
   }, [page]);
 
   const updateRole = async (userId, role) => {
@@ -26,6 +20,26 @@ export default function AdminUsers() {
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed');
     }
+  };
+
+  const toggleBlock = async (userId, isBlocked) => {
+    try {
+      await api.put(`/admin/users/${userId}`, { isBlocked: !isBlocked });
+      toast.success(`User ${!isBlocked ? 'blocked' : 'unblocked'}`);
+      fetchUsers(); // Using fetchUsers to reload, wait we need to define fetchUsers
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update user status');
+    }
+  };
+
+  const fetchUsers = () => {
+    setLoading(true);
+    api.get(`/admin/users?page=${page}&limit=10`)
+      .then(({ data }) => {
+        setUsers(data.users);
+        setTotalPages(data.totalPages);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -60,7 +74,15 @@ export default function AdminUsers() {
                       <option value="admin">Admin</option>
                     </select>
                   </td>
-                  <td className="p-4 text-right">—</td>
+                  <td className="p-4 text-right space-x-2">
+                    <button
+                      onClick={() => toggleBlock(u._id, u.isBlocked)}
+                      className={`text-sm font-medium ${u.isBlocked ? 'text-green-600 hover:text-green-800' : 'text-red-500 hover:text-red-700'}`}
+                    >
+                      {u.isBlocked ? 'Unblock' : 'Block'}
+                    </button>
+                    {/* View history could be added by filtering orders page by this user's email */}
+                  </td>
                 </tr>
               ))}
             </tbody>

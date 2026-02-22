@@ -88,7 +88,7 @@ export default function Checkout() {
           }
         },
         prefill: { name: address.name, contact: address.phone },
-        theme: { color: '#0d9488' },
+        theme: { color: '#18181b' },
       };
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', () => toast.error('Payment failed'));
@@ -101,69 +101,70 @@ export default function Checkout() {
   if (items.length === 0 && !order) return null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="font-display text-3xl font-bold mb-2">Checkout</h1>
-      <p className="text-stone-600 mb-8">Enter your shipping address, then complete payment securely with Razorpay.</p>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-14">
+      <h1 className="page-heading">Checkout</h1>
+      <p className="page-subheading mt-2 mb-10">Enter your shipping address, then complete payment securely with Razorpay.</p>
 
       {step === 1 && (
-        <div className="space-y-6">
-          <div className="card p-6">
-            <h2 className="font-semibold text-lg mb-4">Shipping Address</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
+        <div className="space-y-8">
+          <div className="section-card">
+            <h2 className="font-display font-bold text-zinc-900 text-lg mb-6">Shipping address</h2>
+            <div className="grid sm:grid-cols-2 gap-5">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-stone-600 mb-1">Full name</label>
-                <input type="text" value={address.name} onChange={(e) => setAddress((a) => ({ ...a, name: e.target.value }))} className="input" required />
+                <label className="block text-sm font-medium text-zinc-700 mb-2">Full name</label>
+                <input type="text" value={address.name} onChange={(e) => setAddress((a) => ({ ...a, name: e.target.value }))} className="input" placeholder="John Doe" required />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-stone-600 mb-1">Street</label>
-                <input type="text" value={address.street} onChange={(e) => setAddress((a) => ({ ...a, street: e.target.value }))} className="input" required />
+                <label className="block text-sm font-medium text-zinc-700 mb-2">Street address</label>
+                <input type="text" value={address.street} onChange={(e) => setAddress((a) => ({ ...a, street: e.target.value }))} className="input" placeholder="123 Main St" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-stone-600 mb-1">City</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">City</label>
                 <input type="text" value={address.city} onChange={(e) => setAddress((a) => ({ ...a, city: e.target.value }))} className="input" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-stone-600 mb-1">State</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">State</label>
                 <input type="text" value={address.state} onChange={(e) => setAddress((a) => ({ ...a, state: e.target.value }))} className="input" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-stone-600 mb-1">ZIP</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">ZIP code</label>
                 <input type="text" value={address.zip} onChange={(e) => setAddress((a) => ({ ...a, zip: e.target.value }))} className="input" required />
               </div>
               <div>
-                <label className="block text-sm font-medium text-stone-600 mb-1">Country</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">Country</label>
                 <input type="text" value={address.country} onChange={(e) => setAddress((a) => ({ ...a, country: e.target.value }))} className="input" required />
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-stone-600 mb-1">Phone</label>
-                <input type="tel" value={address.phone} onChange={(e) => setAddress((a) => ({ ...a, phone: e.target.value }))} className="input" required />
+                <label className="block text-sm font-medium text-zinc-700 mb-2">Phone</label>
+                <input type="tel" value={address.phone} onChange={(e) => setAddress((a) => ({ ...a, phone: e.target.value }))} className="input" placeholder="+1 234 567 8900" required />
               </div>
             </div>
           </div>
-          <div className="card p-6">
-            <p className="text-stone-600">Subtotal: ₹{subtotal.toFixed(2)}</p>
-            <p className="text-stone-600">Tax: ₹{tax.toFixed(2)}</p>
-            <p className="text-stone-600">Shipping: ₹{shipping.toFixed(2)}</p>
-            <p className="font-semibold text-lg mt-2">Total: ₹{total.toFixed(2)}</p>
+          <div className="section-card">
+            <h2 className="font-display font-bold text-zinc-900 mb-4">Order summary</h2>
+            <div className="space-y-2 text-zinc-600">
+              <p className="flex justify-between"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></p>
+              <p className="flex justify-between"><span>Tax</span><span>₹{tax.toFixed(2)}</span></p>
+              <p className="flex justify-between"><span>Shipping</span><span>₹{shipping.toFixed(2)}</span></p>
+            </div>
+            <p className="flex justify-between font-bold text-zinc-900 text-lg mt-4 pt-4 border-t border-zinc-100">Total <span>₹{total.toFixed(2)}</span></p>
           </div>
-          <button type="button" onClick={createOrder} className="btn-primary w-full">
-            Continue to Payment
+          <button type="button" onClick={createOrder} className="btn-primary w-full py-3.5">
+            Continue to payment
           </button>
         </div>
       )}
 
       {step === 2 && order && (
-        <div className="card p-6 space-y-6">
-          <h2 className="font-semibold text-lg">Payment (Razorpay)</h2>
-          <div className="space-y-2">
-            <p className="text-stone-600">Order total: ₹{total.toFixed(2)}</p>
-            <p className="text-sm text-stone-500">You will be redirected to Razorpay to complete the payment securely.</p>
-          </div>
-          <div className="flex gap-3">
-            <button type="button" onClick={openRazorpayCheckout} className="btn-primary flex-1">
+        <div className="section-card space-y-6">
+          <h2 className="font-display font-bold text-zinc-900 text-lg">Payment (Razorpay)</h2>
+          <p className="text-zinc-600">Order total: <span className="font-bold text-zinc-900">₹{total.toFixed(2)}</span></p>
+          <p className="text-sm text-zinc-500">You will be redirected to Razorpay to complete the payment securely.</p>
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={openRazorpayCheckout} className="btn-primary flex-1 py-3.5">
               Pay with Razorpay
             </button>
-            <button type="button" onClick={() => setStep(1)} className="btn-secondary">
+            <button type="button" onClick={() => setStep(1)} className="btn-secondary py-3.5">
               Back
             </button>
           </div>

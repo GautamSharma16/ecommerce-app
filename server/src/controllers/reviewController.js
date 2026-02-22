@@ -19,6 +19,7 @@ export const addReview = async (req, res) => {
     await product.save();
     res.status(201).json(product);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

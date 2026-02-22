@@ -26,6 +26,7 @@ export const getProducts = async (req, res) => {
     ]);
     res.json({ products, totalPages: Math.ceil(total / Number(limit)), page: Number(page), total });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -36,6 +37,7 @@ export const getProductBySlug = async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found.' });
     res.json(product);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -46,6 +48,7 @@ export const getProductById = async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found.' });
     res.json(product);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -55,6 +58,7 @@ export const getCategories = async (req, res) => {
     const categories = await Product.distinct('category', { isActive: true });
     res.json(categories.sort());
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

@@ -48,47 +48,75 @@ export default function ProductCard({ product }) {
     }
   };
 
+  const primaryImage = product.images?.[0]?.url || 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=400';
+  const secondaryImage = product.images?.[1]?.url;
+
   return (
-    <Link to={`/product/${product.slug}`} className="group card overflow-hidden block">
-      <div className="relative aspect-[3/4] bg-stone-100 overflow-hidden">
+    <Link to={`/product/${product.slug}`} className="group block">
+      <div className="relative aspect-[3/4] bg-zinc-100 overflow-hidden rounded-2xl mb-4 shadow-sm">
+        {/* Primary Image */}
         <img
-          src={product.images?.[0]?.url || 'https://via.placeholder.com/400'}
+          src={primaryImage}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className={`w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${secondaryImage ? 'group-hover:opacity-0 group-hover:scale-105' : 'group-hover:scale-110'}`}
         />
-        {user && (
-          <button
-            type="button"
-            onClick={toggleWishlist}
-            className="absolute top-2 right-2 p-2 rounded-full bg-white/90 hover:bg-white shadow"
-            aria-label="Wishlist"
-          >
-            <FiHeart className={`w-4 h-4 ${wishlisted ? 'fill-brand-600 text-brand-600' : ''}`} />
-          </button>
+        {/* Secondary Image (Hover) */}
+        {secondaryImage && (
+          <img
+            src={secondaryImage}
+            alt={`${product.name} alternate view`}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] scale-105 group-hover:opacity-100 group-hover:scale-100"
+          />
         )}
-        {product.compareAtPrice > product.price && (
-          <span className="absolute top-2 left-2 bg-brand-600 text-white text-xs font-medium px-2 py-1 rounded">
-            Sale
-          </span>
-        )}
-      </div>
-      <div className="p-4">
-        <h3 className="font-medium truncate">{product.name}</h3>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-brand-600 font-semibold">${product.price.toFixed(2)}</span>
+
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-zinc-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+        {/* Badges & Wishlist */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
           {product.compareAtPrice > product.price && (
-            <span className="text-stone-400 text-sm line-through">${product.compareAtPrice.toFixed(2)}</span>
+            <span className="bg-zinc-950 text-white text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full">
+              Sale
+            </span>
+          )}
+          {product.isNewArrival && (
+            <span className="bg-white text-zinc-950 text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full shadow-sm">
+              New
+            </span>
           )}
         </div>
-        {user && (
+
+        <button
+          type="button"
+          onClick={toggleWishlist}
+          className="absolute top-3 right-3 p-2.5 rounded-full bg-white/90 backdrop-blur hover:bg-white hover:scale-110 transition-all duration-300 shadow-sm z-20"
+          aria-label="Wishlist"
+        >
+          <FiHeart className={`w-4 h-4 transition-colors ${wishlisted ? 'fill-red-500 text-red-500' : 'text-zinc-600'}`} />
+        </button>
+
+        {/* Quick Add Bottom Bar */}
+        <div className="absolute inset-x-4 bottom-4 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
           <button
             type="button"
             onClick={handleAddToCart}
-            className="btn-primary w-full mt-3 text-sm py-2"
+            className="w-full bg-white/95 backdrop-blur-sm text-zinc-950 text-sm font-bold py-3.5 rounded-xl hover:bg-zinc-950 hover:text-white transition-colors duration-300 shadow-lg border border-white/20"
           >
-            Add to Cart
+            Quick Add
           </button>
-        )}
+        </div>
+      </div>
+
+      {/* Meta */}
+      <div className="px-1">
+        <h3 className="font-semibold text-zinc-950 text-base truncate group-hover:text-zinc-600 transition-colors">{product.name}</h3>
+        <p className="text-zinc-500 text-sm mb-1">{product.category}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="font-bold text-zinc-950">${product.price.toFixed(2)}</span>
+          {product.compareAtPrice > product.price && (
+            <span className="text-zinc-400 text-sm line-through font-medium">${product.compareAtPrice.toFixed(2)}</span>
+          )}
+        </div>
       </div>
     </Link>
   );

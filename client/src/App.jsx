@@ -18,6 +18,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminCategories from './pages/admin/AdminCategories';
+import AdminCoupons from './pages/admin/AdminCoupons';
+import AdminReviews from './pages/admin/AdminReviews';
 import { useAuth } from './context/AuthContext';
 
 function ProtectedRoute({ children }) {
@@ -92,6 +95,9 @@ export default function App() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="categories" element={<AdminCategories />} />
+            <Route path="coupons" element={<AdminCoupons />} />
+            <Route path="reviews" element={<AdminReviews />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

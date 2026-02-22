@@ -36,6 +36,17 @@ export default function AdminOrders() {
     }
   };
 
+  const triggerRefund = async (orderId) => {
+    if (!window.confirm('Are you sure you want to refund this order via Razorpay?')) return;
+    try {
+      await api.post(`/admin/orders/${orderId}/refund`);
+      toast.success('Refund processed successfully');
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to refund. Make sure RAZORPAY API keys are valid.');
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
@@ -89,7 +100,17 @@ export default function AdminOrders() {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="p-4 text-right">—</td>
+                    <td className="p-4 text-right space-x-2">
+                      <Link to={`/orders/${order._id}`} className="text-brand-600 hover:text-brand-800 text-sm font-medium">View</Link>
+                      {order.isPaid && order.status === 'cancelled' && order.paymentResult?.status !== 'refunded' && (
+                        <button onClick={() => triggerRefund(order._id)} className="text-amber-600 hover:text-amber-800 text-sm font-medium ml-2">
+                          Refund
+                        </button>
+                      )}
+                      {order.paymentResult?.status === 'refunded' && (
+                        <span className="text-stone-400 text-sm font-medium ml-2">Refunded</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

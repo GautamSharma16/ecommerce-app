@@ -1,0 +1,49 @@
+const  mongoose =require( 'mongoose');
+const  bcrypt =require  ('bcryptjs');
+
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    password: { type: String, required: true, minlength: 6, select: false },
+    avatar: { type: String, default: '' },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    address: {
+      street: String,
+      city: String,
+      state: String,
+      zip: String,
+      country: String,
+    },
+    phone: { type: String, default: '' },
+    isBlocked: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
+  },
+  { timestamps: true }
+);
+// 🔥 Token generate function
+userSchema.methods.getResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+module.exports = mongoose.model("User", userSchema);

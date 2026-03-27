@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Layout from './components/Layout';
+import ForgotPassword from "./components/ForgotPassword";
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductPage from './pages/ProductPage';
@@ -43,64 +44,40 @@ export default function App() {
       <CartProvider>
         <Toaster position="top-right" />
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="shop" element={<Shop />} />
-            <Route path="product/:slug" element={<ProductPage />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route
-              path="checkout"
-              element={
-                <ProtectedRoute>
-                  <Checkout />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="orders"
-              element={
-                <ProtectedRoute>
-                  <Orders />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="orders/:id"
-              element={
-                <ProtectedRoute>
-                  <OrderDetail />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-          <Route
-            path="admin"
-            element={
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="categories" element={<AdminCategories />} />
-            <Route path="coupons" element={<AdminCoupons />} />
-            <Route path="reviews" element={<AdminReviews />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+  <Route path="/" element={<Layout />}>
+    <Route index element={<Home />} />
+    <Route path="shop" element={<Shop />} />
+    <Route path="product/:slug" element={<ProductPage />} />
+    <Route path="cart" element={<Cart />} />
+    <Route path="login" element={<Login />} />
+    <Route path="register" element={<Register />} />
+
+    {/* 👇 YAHI ADD KAR */}
+    <Route path="forgot-password" element={<ForgotPassword />} />
+
+    <Route
+      path="checkout"
+      element={
+        <ProtectedRoute>
+          <Checkout />
+        </ProtectedRoute>
+      }
+    />
+  </Route>
+
+  <Route
+    path="admin"
+    element={
+      <AdminRoute>
+        <AdminLayout />
+      </AdminRoute>
+    }
+  >
+    <Route index element={<AdminDashboard />} />
+  </Route>
+
+  <Route path="*" element={<Navigate to="/" replace />} />
+</Routes>
       </CartProvider>
     </AuthProvider>
   );

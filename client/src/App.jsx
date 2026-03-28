@@ -52,7 +52,7 @@ export default function App() {
     <Route path="login" element={<Login />} />
     <Route path="register" element={<Register />} />
 
-    {/* 👇 YAHI ADD KAR */}
+   
     <Route path="forgot-password" element={<ForgotPassword />} />
 
     <Route

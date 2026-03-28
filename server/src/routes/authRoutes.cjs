@@ -35,6 +35,14 @@ const authValidation = {
     body("email").isEmail().normalizeEmail().withMessage("Valid email required"),
     body("password").notEmpty().withMessage("Password required"),
   ],
+  forgotPassword: [
+    body("email").isEmail().normalizeEmail().withMessage("Valid email required"),
+  ],
+  resetPassword: [
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
 };
 
 const router = express.Router();
@@ -47,8 +55,8 @@ router.get("/me", protect, getMe);
 router.put("/profile", protect, updateProfile);
 
 // 🔑 Password reset
-router.post("/forgot-password", forgotPassword);
-router.put("/reset-password/:token", resetPassword);
+router.post("/forgot-password", authValidation.forgotPassword, validate, forgotPassword);
+router.put("/reset-password/:token", authValidation.resetPassword, validate, resetPassword);
 
 // ✅ Export
 module.exports = router;
